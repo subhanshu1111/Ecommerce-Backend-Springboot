@@ -1,16 +1,17 @@
 package com.example.first_draft.service;
 
+import com.example.first_draft.dto.ProductNamePriceDTO;
 import com.example.first_draft.entity.Product;
+import com.example.first_draft.entity.Seller;
 import com.example.first_draft.repository.ProductRepository;
+import com.example.first_draft.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class ProductService {
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -28,5 +29,8 @@ public class ProductService {
 
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+    public List<ProductNamePriceDTO> findProductsByName(String name) {
+        return productRepository.findProductByName(name);
     }
 }

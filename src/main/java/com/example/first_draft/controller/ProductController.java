@@ -1,5 +1,6 @@
 package com.example.first_draft.controller;
 
+import com.example.first_draft.dto.ProductNamePriceDTO;
 import com.example.first_draft.entity.Product;
 import com.example.first_draft.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class ProductController {
     @DeleteMapping("/delete/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);
+    }
+    @GetMapping("/search")
+    public List<ProductNamePriceDTO> searchProductsByName(@RequestParam String name) {
+        return productService.findProductsByName(name);
     }
 
 }
