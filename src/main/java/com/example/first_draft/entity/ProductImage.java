@@ -2,29 +2,33 @@ package com.example.first_draft.entity;
 
 import com.example.first_draft.common.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Repository;
+
+
+
+
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Entity
-public class Size extends BaseEntity {
+public class ProductImage extends BaseEntity {
 
 
-    private String sku;
-    private String size;
-    private Double price;
-    private Integer quantity;
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    @JsonBackReference
-    private Product product;
+    private String imagePath;
+    private String imageColor;
+
+
+
 
 }
