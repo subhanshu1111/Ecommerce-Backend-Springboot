@@ -40,4 +40,6 @@ public class BuyerController {
             @RequestParam Long productId) {
         return buyerService.removeItemFromCart(buyerId, productId);
     }
+
+
 }

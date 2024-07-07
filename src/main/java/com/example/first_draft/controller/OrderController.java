@@ -31,6 +31,12 @@ public class OrderController {
         return ResponseEntity.ok(convertToOrderDTO(order));
     }
 
+    @PostMapping("/buyNow")
+    public ResponseEntity<OrderDTO> processBuyNow(@RequestParam Long buyerId, @RequestParam Long productId, @RequestParam Long colorId, @RequestParam Long sizeId) {
+        Order order = orderService.processBuyNow(buyerId,productId,colorId, sizeId);
+        return ResponseEntity.ok(convertToOrderDTO(order));
+    }
+
     private OrderDTO convertToOrderDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setId(order.getId());

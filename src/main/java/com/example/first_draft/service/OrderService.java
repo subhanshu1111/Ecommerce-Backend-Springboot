@@ -1,18 +1,17 @@
 package com.example.first_draft.service;
 
 import com.example.first_draft.entity.*;
-import com.example.first_draft.repository.BuyerRepository;
-import com.example.first_draft.repository.OrderHistoryRepository;
-import com.example.first_draft.repository.OrderRepository;
-import com.example.first_draft.repository.ShoppingCartRepository;
+import com.example.first_draft.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
 
 @Service
 public class OrderService {
+
+
 
     @Autowired
     private OrderRepository orderRepository;
@@ -25,6 +24,8 @@ public class OrderService {
 
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Transactional
     public Order placeOrder(Long buyerId) {
@@ -50,8 +51,9 @@ public class OrderService {
             orderItem.setColor(cartItem.getColor());
             orderItem.setSize(cartItem.getSize());
             orderItem.setQuantity(cartItem.getQuantity());
+            Double sizeColorTotal = cartItem.getColor().getPrice() + cartItem.getSize().getPrice();
+            Double itemPrice = cartItem.getSize().getPrice() + sizeColorTotal;
 
-            Double itemPrice = cartItem.getColor() != null ? cartItem.getColor().getPrice() : cartItem.getProduct().getStandardPrice();
             orderItem.setPrice(itemPrice);
 
             totalCost += itemPrice * cartItem.getQuantity();
@@ -70,6 +72,43 @@ public class OrderService {
        shoppingCartRepository.save(cart);
         return savedOrder;
     }
+
+    @Transactional
+    public Order processBuyNow(Long buyerId, Long productId, Long colorId, Long sizeId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Buyer buyer = buyerRepository.findById(buyerId)
+                .orElseThrow(() -> new RuntimeException("Buyer not found"));
+        Color color = product.getColors().stream()
+                .filter(c -> c.getId().equals(colorId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product with specific color does not exist"));
+
+        Size size = product.getSizes().stream()
+                .filter(s -> s.getId().equals(sizeId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product with specific size does not exist"));
+
+        Double sizeColorTotal = color.getPrice() + size.getPrice();
+        Double tCost = color.getPrice() + sizeColorTotal;
+        Order order = new Order();
+        order.setBuyer(buyer);
+        order.setStatus("PENDING");
+        order.setOrderDate(new Date());
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setProduct(product);
+        orderItem.setColor(color);
+        orderItem.setSize(size);
+        orderItem.setQuantity(1);
+        orderItem.setPrice(tCost);
+        order.getOrderItems().add(orderItem);
+        order.setTotalCost(tCost);
+
+        return orderRepository.save(order);
+    }
+
+
 
     @Transactional
     public Order processPayment(Long orderId) {
@@ -103,4 +142,6 @@ public class OrderService {
 
         return paidOrder;
     }
+
+
 }
