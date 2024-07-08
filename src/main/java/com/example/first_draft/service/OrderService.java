@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -27,6 +28,36 @@ public class OrderService {
     private ShoppingCartRepository shoppingCartRepository;
     @Autowired
     private ProductRepository productRepository;
+
+
+
+    private void updateOrderHistory(Buyer buyer, Order order) {
+        OrderHistory orderHistory = buyer.getOrderHistory();
+        if (orderHistory == null) {
+            orderHistory = new OrderHistory(buyer);
+            buyer.setOrderHistory(orderHistory);
+        }
+
+        order.setOrderHistory(orderHistory);
+        orderHistory.getOrders().add(order);
+
+        List<String> productNames = order.getOrderItems().stream()
+                .map(item -> item.getProduct().getName())
+                .toList();
+        orderHistory.getProductNames().addAll(productNames);
+
+        List<String> sellers = order.getOrderItems().stream()
+                .map(item -> item.getProduct().getSeller().getOrganizationName())
+                .toList();
+        orderHistory.getSellers().addAll(sellers);
+
+        List<Double> originalPrices = order.getOrderItems().stream()
+                .map(OrderItem::getPrice)
+                .toList();
+        orderHistory.getOriginalPrices().addAll(originalPrices);
+
+        orderHistoryRepository.save(orderHistory);
+    }
 
     @Transactional
     public Order placeOrder(Long buyerId) {
@@ -60,7 +91,20 @@ public class OrderService {
             totalCost += itemPrice * cartItem.getQuantity();
 
             order.getOrderItems().add(orderItem);
+            Product product = cartItem.getProduct();
+            int newQuantity =  product.getQuantity()- cartItem.getQuantity();
+            System.out.println(newQuantity);
+            if(newQuantity < 0) {
+                throw new RuntimeException("Not enough stock for" + product.getName());
+            }
+            product.setQuantity(newQuantity);
+            productRepository.save(product);
         }
+
+
+
+
+
 
         order.setTotalCost(totalCost);
 
@@ -71,6 +115,7 @@ public class OrderService {
 
         cart.getCartItems().clear();
        shoppingCartRepository.save(cart);
+        updateOrderHistory(buyer, order);
         return savedOrder;
     }
 
@@ -105,6 +150,16 @@ public class OrderService {
         orderItem.setPrice(tCost);
         order.getOrderItems().add(orderItem);
         order.setTotalCost(tCost);
+        Order savedOrder = orderRepository.save(order);
+        updateOrderHistory(buyer, savedOrder);
+
+        int newQuantity = product.getQuantity() - 1;
+        if(newQuantity < 0) {
+            throw new RuntimeException("Not enough stock for" + product.getName());
+        }
+        product.setQuantity(newQuantity);
+
+
 
         return orderRepository.save(order);
     }
@@ -116,7 +171,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        if (!"PENDING".equals(order.getStatus())) {
+        if (!String.valueOf(OrderStatus.PENDING).equals(order.getStatus())) {
             throw new RuntimeException("Order is not in PENDING status");
         }
 
@@ -126,7 +181,6 @@ public class OrderService {
 
         order.setStatus(String.valueOf(OrderStatus.PAID));
         order.setPaymentDate(new Date());
-
         Buyer buyer = order.getBuyer();
         OrderHistory orderHistory = buyer.getOrderHistory();
         if (orderHistory == null) {
