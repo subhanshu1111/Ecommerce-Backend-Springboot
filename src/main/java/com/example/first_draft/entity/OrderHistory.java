@@ -24,11 +24,6 @@ public class OrderHistory extends BaseEntity {
 
     private String sellerName;
     private String productCost;
-
-
-
-
-
     @OneToOne
     @JoinColumn(name = "buyer_id", nullable = false)
     @JsonIgnore

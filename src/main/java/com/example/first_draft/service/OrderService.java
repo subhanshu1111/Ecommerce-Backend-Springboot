@@ -1,6 +1,7 @@
 package com.example.first_draft.service;
 
 import com.example.first_draft.entity.*;
+import com.example.first_draft.enums.OrderStatus;
 import com.example.first_draft.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class OrderService {
 
         Order order = new Order();
         order.setBuyer(buyer);
-        order.setStatus("PENDING");
+        order.setStatus(String.valueOf(OrderStatus.PENDING));
         order.setOrderDate(new Date());
 
         double totalCost = 0;
@@ -93,7 +94,7 @@ public class OrderService {
         Double tCost = color.getPrice() + sizeColorTotal;
         Order order = new Order();
         order.setBuyer(buyer);
-        order.setStatus("PENDING");
+        order.setStatus(String.valueOf(OrderStatus.PENDING));
         order.setOrderDate(new Date());
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
@@ -123,7 +124,7 @@ public class OrderService {
         Payment Process LOGIC in the future
     */
 
-        order.setStatus("PAID");
+        order.setStatus(String.valueOf(OrderStatus.PAID));
         order.setPaymentDate(new Date());
 
         Buyer buyer = order.getBuyer();
@@ -136,6 +137,7 @@ public class OrderService {
 
         order.setOrderHistory(orderHistory);
         orderHistory.getOrders().add(order);
+
 
         Order paidOrder = orderRepository.save(order);
         orderHistoryRepository.save(orderHistory);
