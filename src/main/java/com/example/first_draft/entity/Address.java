@@ -25,8 +25,12 @@ public class Address extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
+
+
 }

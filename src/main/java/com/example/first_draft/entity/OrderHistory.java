@@ -27,28 +27,14 @@ public class OrderHistory extends BaseEntity {
     @OneToMany(mappedBy = "orderHistory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(name = "order_history_product_names", joinColumns = @JoinColumn(name = "order_history_id"))
-    @Column(name = "product_name")
-    private List<String> productNames = new ArrayList<>();
-
-    @ElementCollection
-    @CollectionTable(name = "order_history_sellers", joinColumns = @JoinColumn(name = "order_history_id"))
-    @Column(name = "seller")
-    private List<String> sellers = new ArrayList<>();
-
-    @ElementCollection
-    @CollectionTable(name = "order_history_original_prices", joinColumns = @JoinColumn(name = "order_history_id"))
-    @Column(name = "original_price")
-    private List<Double> originalPrices = new ArrayList<>();
-
-
+    @OneToMany(mappedBy = "orderHistory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderHistoryItem> items = new ArrayList<>();
 
     public OrderHistory(Buyer buyer) {
         this.buyer = buyer;
         this.orders = new ArrayList<>();
-        this.productNames = new ArrayList<>();
-        this.sellers = new ArrayList<>();
-        this.originalPrices = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
+
+
 }

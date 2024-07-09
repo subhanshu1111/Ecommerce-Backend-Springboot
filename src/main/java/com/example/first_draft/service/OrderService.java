@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -41,20 +40,16 @@ public class OrderService {
         order.setOrderHistory(orderHistory);
         orderHistory.getOrders().add(order);
 
-        List<String> productNames = order.getOrderItems().stream()
-                .map(item -> item.getProduct().getName())
-                .toList();
-        orderHistory.getProductNames().addAll(productNames);
+        for (OrderItem item : order.getOrderItems()) {
+            OrderHistoryItem historyItem = new OrderHistoryItem();
+            historyItem.setOrderHistory(orderHistory);
+            historyItem.setProductId(item.getProduct().getId());  // Add this line
+            historyItem.setProductName(item.getProduct().getName());
+            historyItem.setSellerName(item.getProduct().getSeller().getOrganizationName());
+            historyItem.setOriginalPrice(item.getPrice());
 
-        List<String> sellers = order.getOrderItems().stream()
-                .map(item -> item.getProduct().getSeller().getOrganizationName())
-                .toList();
-        orderHistory.getSellers().addAll(sellers);
-
-        List<Double> originalPrices = order.getOrderItems().stream()
-                .map(OrderItem::getPrice)
-                .toList();
-        orderHistory.getOriginalPrices().addAll(originalPrices);
+            orderHistory.getItems().add(historyItem);
+        }
 
         orderHistoryRepository.save(orderHistory);
     }

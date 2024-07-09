@@ -40,6 +40,7 @@ public class Product extends BaseEntity {
     @JsonManagedReference
     private List<Color> colors = new ArrayList<>();
 
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_id")
     @JsonManagedReference
@@ -57,10 +58,11 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "product_id")
     private List<ProductImage> productImages = new ArrayList<>();
 
+
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_id")
     private List<Banner> banner = new ArrayList<>();
-
 
     public void setColors(List<Color> colors) {
         this.colors.clear();
