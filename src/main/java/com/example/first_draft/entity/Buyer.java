@@ -2,7 +2,7 @@ package com.example.first_draft.entity;
 
 import com.example.first_draft.common.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,15 +19,13 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "buyer")
+@JsonIgnoreProperties({"reviews"})
 public class Buyer extends BaseEntity {
     private String accountStatus;
 
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
 
     private List<Review> reviews = new ArrayList<>();
-
-
-
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
