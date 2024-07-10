@@ -1,7 +1,6 @@
 package com.example.first_draft.custom;
 
 import com.example.first_draft.dto.ProductNamePriceDTO;
-import com.example.first_draft.entity.Product;
 
 import java.util.List;
 

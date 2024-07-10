@@ -2,9 +2,7 @@ package com.example.first_draft.service;
 
 import com.example.first_draft.dto.ProductNamePriceDTO;
 import com.example.first_draft.entity.Product;
-import com.example.first_draft.entity.Seller;
 import com.example.first_draft.repository.ProductRepository;
-import com.example.first_draft.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

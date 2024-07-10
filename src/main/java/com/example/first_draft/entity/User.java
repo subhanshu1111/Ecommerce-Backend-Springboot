@@ -1,6 +1,5 @@
 package com.example.first_draft.entity;
 import com.example.first_draft.common.model.BaseEntity;
-import com.example.first_draft.entity.Address;
 
 import com.example.first_draft.enums.Role;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -10,9 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Getter

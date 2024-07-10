@@ -17,7 +17,7 @@ public class SellerController {
     @Autowired
     private SellerService sellerService;
 
-    public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
+    public static final String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 
     @PostMapping("/add")
     public Seller addSeller(@RequestBody Seller seller) {

@@ -43,11 +43,11 @@ public class SellerService {
         }
         return sellerRepository.save(seller);
     }
-
+    String sellerNotFound = "Seller not found";
     @Transactional
     public Product addProductToSeller(Long sellerId, Product product, List<MultipartFile> files, List<String> colors, List <MultipartFile> f) throws IOException {
         Seller seller = sellerRepository.findById(sellerId)
-                .orElseThrow(() -> new RuntimeException("Seller not found"));
+                .orElseThrow(() -> new RuntimeException(sellerNotFound));
            List<Color> colorsList = product.getColors();
         Set<String> colorNames = new HashSet<>();
         for(Color color : colorsList) {
@@ -109,7 +109,7 @@ public class SellerService {
     @Transactional
     public void removeProductFromSeller(Long sellerId, Long productId) {
         Seller seller = sellerRepository.findById(sellerId)
-                .orElseThrow(() -> new RuntimeException("Seller not found"));
+                .orElseThrow(() -> new RuntimeException(sellerNotFound));
 
         Product product = productService.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
