@@ -32,6 +32,10 @@ public class Product extends BaseEntity {
     private Double discount;
     private String fullfillmentType;
     private String whatInBox;
+    private Double avgReview;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    private List<Review> reviews = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     private String htmlContent;
@@ -64,6 +68,8 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "product_id")
     private List<Banner> banner = new ArrayList<>();
 
+
+
     public void setColors(List<Color> colors) {
         this.colors.clear();
         if (colors != null) {
@@ -76,5 +82,15 @@ public class Product extends BaseEntity {
         if (sizes != null) {
             this.sizes.addAll(sizes);
         }
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setProduct(this);
+    }
+
+    public void removeReview(Review review) {
+        reviews.remove(review);
+        review.setProduct(null);
     }
 }
