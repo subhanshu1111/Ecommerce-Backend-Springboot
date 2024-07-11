@@ -34,6 +34,8 @@ public class ReviewService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private AverageReviewService averageReviewService;
 
     @Transactional
     public Review addReview(Long buyerId, Long productId, Review review, List<MultipartFile> files) throws IOException {
@@ -96,8 +98,10 @@ public class ReviewService {
         product.addReview(review);
         review.setVerified(true);
         review.setReviewImages(reviewImages);
+            Review savedReview = reviewRepository.save(review);
+            averageReviewService.updateAverageReview(product);
             logger.info("Review added successfully");
-            return reviewRepository.save(review);
+            return savedReview;
         } catch (Exception e) {
             logger.error("Error in addReview method", e);
             throw e;

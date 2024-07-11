@@ -33,7 +33,7 @@ public class Product extends BaseEntity {
     private Double discount;
     private String fullfillmentType;
     private String whatInBox;
-    private Double avgReview;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
     private List<Review> reviews = new ArrayList<>();
@@ -69,6 +69,9 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "product_id")
     private List<Banner> banner = new ArrayList<>();
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AverageReview averageReview;
+
 
 
     public void setColors(List<Color> colors) {
@@ -93,5 +96,16 @@ public class Product extends BaseEntity {
     public void removeReview(Review review) {
         reviews.remove(review);
         review.setProduct(null);
+    }
+
+    public void setAverageReview(AverageReview averageReview) {
+        if (averageReview == null) {
+            if (this.averageReview != null) {
+                this.averageReview.setProduct(null);
+            }
+        } else {
+            averageReview.setProduct(this);
+        }
+        this.averageReview = averageReview;
     }
 }
