@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,5 +41,19 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Buyer buyer;
+
+    @OneToMany(mappedBy = "answeredBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductAnswer> providedAnswers = new ArrayList<>();
+
+
+    public void addProvidedAnswer(ProductAnswer answer) {
+            providedAnswers.add(answer);
+            answer.setAnsweredBy(this);
+    }
+
+    public void removeProvidedAnswer(ProductAnswer answer){
+        providedAnswers.remove(answer);
+        answer.setAnsweredBy(null);
+    }
 
 }

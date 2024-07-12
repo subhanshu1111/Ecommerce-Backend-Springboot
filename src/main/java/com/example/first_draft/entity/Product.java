@@ -31,7 +31,7 @@ public class Product extends BaseEntity {
     private String sellerSku;
     private Double standardPrice;
     private Double discount;
-    private String fullfillmentType;
+    private String fulfillmentType;
     private String whatInBox;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -59,6 +59,7 @@ public class Product extends BaseEntity {
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_id")
     private List<ProductImage> productImages = new ArrayList<>();
@@ -71,6 +72,20 @@ public class Product extends BaseEntity {
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private AverageReview averageReview;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductQuestion> questions = new ArrayList<>();
+
+    public void addQuestion(ProductQuestion question) {
+        questions.add(question);
+        question.setProduct(this);
+    }
+
+    public void removeQuestion(ProductQuestion question) {
+        questions.remove(question);
+        question.setProduct(null);
+    }
+
 
 
 

@@ -38,6 +38,10 @@ public class Buyer extends BaseEntity {
     @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private OrderHistory orderHistory;
 
+    @OneToMany(mappedBy = "askedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductQuestion> askedQuestions = new ArrayList<>();
+
+
     public void addReview(Review review) {
         reviews.add(review);
         review.setBuyer(this);
@@ -47,4 +51,14 @@ public class Buyer extends BaseEntity {
         reviews.remove(review);
         review.setBuyer(null);
     }
+    public void addAskedQuestion(ProductQuestion question) {
+        askedQuestions.add(question);
+        question.setAskedBy(this);
+    }
+
+    public void removeAskedQuestion(ProductQuestion question) {
+        askedQuestions.remove(question);
+        question.setAskedBy(null);
+    }
+
 }
