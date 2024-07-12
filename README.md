@@ -49,6 +49,7 @@ This project is an evolving e-commerce backend system built with Spring Boot. Be
 - Delivery options (Enum: standard, express)
 - Seller information
 - Q&A section
+- Review section
 - Specifications (brand, SKU, seller-manipulated)
 - Special discounts
 - Reviews with like/dislike functionality
