@@ -88,4 +88,4 @@ You are free to use, modify, and distribute this software, provided that:
 2. You license any derivative works under the same AGPLv3 license.
 3. If you run a modified version of this software as a network service, you must make the complete source code of the modified version available to the users of that service.
 
-For more details, see the [LICENSE](LICENSE) file in this repository or visit [https://www.gnu.org/licenses/agpl-3.0.en.html](https://www.gnu.org/licenses/agpl-3.0.en.html).
+For more details, visit [https://www.gnu.org/licenses/agpl-3.0.en.html](https://www.gnu.org/licenses/agpl-3.0.en.html).
