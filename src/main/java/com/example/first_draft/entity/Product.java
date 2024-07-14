@@ -74,6 +74,7 @@ public class Product extends BaseEntity {
     private AverageReview averageReview;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ProductQuestion> questions = new ArrayList<>();
 
     public void addQuestion(ProductQuestion question) {

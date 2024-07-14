@@ -3,6 +3,7 @@ package com.example.first_draft.entity;
 import com.example.first_draft.common.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class Buyer extends BaseEntity {
     private OrderHistory orderHistory;
 
     @OneToMany(mappedBy = "askedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ProductQuestion> askedQuestions = new ArrayList<>();
 
 

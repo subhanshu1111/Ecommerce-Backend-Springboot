@@ -1,6 +1,7 @@
 package com.example.first_draft.entity;
 
 import com.example.first_draft.common.model.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,13 @@ public class ProductQuestion extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "product_id",nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Product product;
+
 
     @ManyToOne
     @JoinColumn(name = "buyer_id",nullable = false)
+    @JsonBackReference
     private Buyer askedBy;
 
     @Column(nullable = false)
